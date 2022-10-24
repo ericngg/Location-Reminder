@@ -5,11 +5,17 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def googleMapApiKey = properties.getProperty('MAPS_API_KEY')
+
 android {
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion "29.0.2"
 
     defaultConfig {
+        manifestPlaceholders = [ myApiMaps: googleMapApiKey ]
+
         applicationId "com.udacity.project4"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
@@ -125,6 +131,9 @@ dependencies {
 
     // Firebase
     implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+
+    // Snackbar
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
 
     implementation 'com.android.support:multidex:1.0.3'
 }
