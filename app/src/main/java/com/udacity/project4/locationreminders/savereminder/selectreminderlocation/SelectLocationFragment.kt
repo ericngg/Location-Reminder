@@ -86,9 +86,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 _viewModel.selectedPOI.value = poi
                 _viewModel.reminderSelectedLocationStr.value = poi.name
 
-                //_viewModel.navigationCommand.value =
-                //    NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment())
-
                 _viewModel.navigationCommand.value = NavigationCommand.Back
             } else {
                 Toast.makeText(requireContext(), "Please select a place of interest", Toast.LENGTH_LONG).show()
@@ -132,6 +129,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setMapStyle(map)
     }
 
+    /**
+
+
+     **/
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { latLng ->
             val snippet = String.format(
@@ -212,7 +213,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
-            } else {
+            } else if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED){
                 Snackbar.make(binding.clLayout, getString(R.string.location_denied), Snackbar.LENGTH_INDEFINITE).setAction(R.string.settings) {
                     startActivity(
                         Intent().apply {

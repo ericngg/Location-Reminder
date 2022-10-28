@@ -84,6 +84,8 @@ class SaveReminderFragment : BaseFragment() {
                 NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToSelectLocationFragment())
         }
 
+        requestForegroundAndBackgroundLocationPermissions()
+
         binding.saveReminder.setOnClickListener {
             val title = _viewModel.reminderTitle.value
             val description = _viewModel.reminderDescription.value
@@ -181,13 +183,11 @@ class SaveReminderFragment : BaseFragment() {
     ) {
         Log.d(TAG, "onRequestPermissionResult")
 
-        if (
-            grantResults.isEmpty() ||
+        if (grantResults.isEmpty() ||
             grantResults[LOCATION_PERMISSION_INDEX] == PackageManager.PERMISSION_DENIED ||
             (requestCode == REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE &&
                     grantResults[BACKGROUND_LOCATION_PERMISSION_INDEX] ==
-                    PackageManager.PERMISSION_DENIED))
-        {
+                    PackageManager.PERMISSION_DENIED)) {
             Snackbar.make(
                 binding.clLayout,
                 R.string.permission_denied_explanation,
@@ -203,6 +203,7 @@ class SaveReminderFragment : BaseFragment() {
         } else {
             checkDeviceLocationSettingsAndStartGeofence()
         }
+
     }
 
     @SuppressLint("MissingPermission")
