@@ -43,37 +43,58 @@ class RemindersListViewModelTest {
         longitude = -122.16645
     )
 
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
-
+    /**
+     *   Initilaize a fake repository and reminderListViewModel
+     */
     @Before
-    fun createRepository() {
+    fun init() {
         fakeRepository = FakeDataSource()
         reminderListViewModel = RemindersListViewModel(getApplicationContext(), fakeRepository)
     }
 
+    /**
+     *   Checks the repository is empty
+     */
     @Test
     fun emptyRepository() {
         reminderListViewModel.loadReminders()
         assertThat(reminderListViewModel.showNoData.value, `is`(true))
     }
 
+    /**
+     *   Adds a reminder and check if it was successful with the loading icon
+     */
     @Test
     fun addReminders() = runBlockingTest {
         fakeRepository.saveReminder(reminder1)
         mainCoroutineRule.pauseDispatcher()
         reminderListViewModel.loadReminders()
 
-        assertThat(reminderListViewModel.showLoading.value, `is`(true))
+        assertThat(reminderListViewModel.showLoading.value, `is` (true))
 
         mainCoroutineRule.resumeDispatcher()
     }
 
+    /**
+     *   Checks if an error will be returned forcefully with the snackbar message
+     */
+    @Test
+    fun addRemindersError() = runBlockingTest {
+        fakeRepository.saveReminder(reminder2)
+        fakeRepository.returnError(true)
+        reminderListViewModel.loadReminders()
+
+        assertThat(reminderListViewModel.showSnackBar.value,`is`("Test: Forced Error"))
+    }
+
+    /**
+     *   Checks if the reminders were deleted and the database is empty with the showNoData screen
+     */
     @Test
     fun deleteReminders() = runBlockingTest {
         fakeRepository.deleteAllReminders()
         reminderListViewModel.loadReminders()
 
-        assertThat(reminderListViewModel.showNoData.value, `is`(true))
+        assertThat(reminderListViewModel.showNoData.value, `is` (true))
     }
 }

@@ -120,7 +120,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLatLng,zoomLevel))
 
         //setMapLongClick(map)
@@ -130,9 +129,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     /**
-
-
-     **/
+     *   Long click map function, not needed
+     */
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { latLng ->
             val snippet = String.format(
@@ -151,6 +149,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     *   sets onClick for poi marker
+     */
     private fun setPoiClick() {
         map.setOnPoiClickListener { poi ->
             if (!poiSelected) {
@@ -167,6 +168,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     *   sets the map style
+     */
     private fun setMapStyle(map: GoogleMap) {
         try {
             val success = map.setMapStyle(
@@ -184,6 +188,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     *   Checks if permission is granted, if not request permissions
+     */
     private fun enableMyLocation() {
         if (isPermissionGranted() && ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -197,12 +204,18 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     *   @return: boolean if permission for fine location is granted
+     */
     private fun isPermissionGranted() : Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION) === PackageManager.PERMISSION_GRANTED
     }
 
+    /**
+     *   If permission isn't granted, show a snackbar and start the settings activity
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,

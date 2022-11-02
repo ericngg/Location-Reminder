@@ -8,10 +8,19 @@ class FakeDataSource(var reminderDTO: MutableList<ReminderDTO>? = mutableListOf(
 
     private var shouldReturnError = false
 
-    private fun returnError(bol: Boolean) {
+    /**
+     *   Sets the test to always return an error
+     *
+     */
+    fun returnError(bol: Boolean) {
         shouldReturnError = bol
     }
 
+    /**
+     *   Returns the reminders from the database.
+     *   Success: returns a MutableList and Result.success
+     *   Fails: returns a error message and Result.error
+     */
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
         if (shouldReturnError) {
             return Result.Error(
@@ -28,10 +37,18 @@ class FakeDataSource(var reminderDTO: MutableList<ReminderDTO>? = mutableListOf(
         )
     }
 
+    /**
+     *   Saves a reminder to the database
+     */
     override suspend fun saveReminder(reminder: ReminderDTO) {
         reminderDTO?.add(reminder)
     }
 
+    /**
+     *   Returns the reminders from the database by Id.
+     *   Success: returns a reminder and Result.success
+     *   Fails: returns a error message and Result.error
+     */
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
         if (shouldReturnError) {
             return Result.Error(
@@ -52,6 +69,9 @@ class FakeDataSource(var reminderDTO: MutableList<ReminderDTO>? = mutableListOf(
         )
     }
 
+    /**
+     *   Deletes all reminders
+     */
     override suspend fun deleteAllReminders() {
         reminderDTO?.clear()
     }

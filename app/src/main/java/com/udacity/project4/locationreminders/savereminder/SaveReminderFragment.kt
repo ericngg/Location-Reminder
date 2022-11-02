@@ -101,6 +101,9 @@ class SaveReminderFragment : BaseFragment() {
         }
     }
 
+    /**
+     *   Checks if location permissions were aproved, if not request it
+     */
     private fun startGeofencing() {
         if (foregroundAndBackgroundLocationPermissionApproved()) {
             checkDeviceLocationSettingsAndStartGeofence()
@@ -109,6 +112,9 @@ class SaveReminderFragment : BaseFragment() {
         }
     }
 
+    /**
+     *   @return: boolean if foreground and background location permissions were approved
+     */
     @TargetApi(29)
     private fun foregroundAndBackgroundLocationPermissionApproved(): Boolean {
         val foregroundLocationApproved = (
@@ -127,6 +133,9 @@ class SaveReminderFragment : BaseFragment() {
         return foregroundLocationApproved && backgroundPermissionApproved
     }
 
+    /**
+     *   Checks if foreground and background locations approved, if not request them
+     */
     @TargetApi(29 )
     private fun requestForegroundAndBackgroundLocationPermissions() {
         if (foregroundAndBackgroundLocationPermissionApproved())
@@ -144,6 +153,11 @@ class SaveReminderFragment : BaseFragment() {
         requestPermissions(permissionsArray, resultCode)
     }
 
+    /**
+     *   Checks location settings and starts the geofence
+     *   Success: start geofence
+     *   Fail: snackbar message of the error
+     */
     private fun checkDeviceLocationSettingsAndStartGeofence(resolve:Boolean = true) {
         val locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_LOW_POWER
@@ -176,6 +190,9 @@ class SaveReminderFragment : BaseFragment() {
         }
     }
 
+    /**
+     *   Checks if permissions were approved, if not direct the user to the settings screen
+     */
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -206,6 +223,9 @@ class SaveReminderFragment : BaseFragment() {
 
     }
 
+    /**
+     *   Adds geofence based on the location the user chose for the reminder
+     */
     @SuppressLint("MissingPermission")
     private fun addGeofence() {
         val geofence = Geofence.Builder()
